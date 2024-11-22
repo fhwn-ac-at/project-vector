@@ -1,0 +1,2 @@
+# Micro Controller
+The software for the micro controller is written in [Micro Python](https://docs.arduino.cc/micropython/micropython-course/course/introduction-python/) with the goal to communicate with connected devices like buttons or switches on an Arduino.
