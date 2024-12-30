@@ -1,0 +1,7 @@
+<mat-selection-list #list (selectionChange)="onChange()">
+    @for (option of options; track option) {
+    <mat-list-option>
+        {{option}}
+    </mat-list-option>
+    }
+</mat-selection-list>
