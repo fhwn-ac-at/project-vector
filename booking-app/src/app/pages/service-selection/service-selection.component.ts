@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageComponent } from '../../components/page/page.component';
 import { ApiService } from '../../services/api.service';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
+import { ServiceEntity } from '../../entities/service.entity';
 
 @Component({
   selector: 'app-service-selection',
@@ -12,8 +13,8 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
 export class ServiceSelectionComponent implements OnInit {
   @ViewChild("list") list?: MatSelectionList;
 
-  services: string[] = [];
-  selectedServices: string[] = [];
+  services: ServiceEntity[] = [];
+  selectedServices: ServiceEntity[] = [];
 
   constructor(private api: ApiService) { }
 

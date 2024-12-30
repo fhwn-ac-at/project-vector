@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ServiceEntity } from '../entities/service.entity';
 
 // Service to communicate with the API
 @Injectable({
@@ -9,13 +10,13 @@ export class ApiService {
 
   constructor() { }
 
-  getServices(): Promise<string[]> {
+  getServices(): Promise<ServiceEntity[]> {
     // TODO implement actual connection
     return Promise.resolve([
-      "Haare schneiden",
-      "Haare waschen",
-      "Haare föhnen",
-      "Haare färben",
+      new ServiceEntity("Haare schneiden", 20),
+      new ServiceEntity("Haare waschen", 10),
+      new ServiceEntity("Haare föhnen", 15),
+      new ServiceEntity("Haare färben", 50),
     ]);
   }
 }
