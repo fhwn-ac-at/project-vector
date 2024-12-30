@@ -2,10 +2,10 @@
     <h1>{{ title }}</h1>
     <ng-content></ng-content>
     <div class="button-container">
-        <button mat-raised-button color="primary">
+        <button mat-raised-button color="primary" [style.visibility]="hideBack ? 'hidden' : 'visible'">
             <p>Zurück</p>
         </button>
-        <button mat-raised-button color="primary">
+        <button mat-raised-button color="primary" [disabled]="disableNext">
             <p>Weiter</p>
         </button>
     </div>

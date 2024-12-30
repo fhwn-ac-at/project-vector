@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button'; 
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'
 
 // Default component to display a page with title and content
@@ -13,4 +13,6 @@ import { MatIconModule } from '@angular/material/icon'
 })
 export class PageComponent {
   @Input() title?: string;
+  @Input() hideBack = false;
+  @Input() disableNext = true;
 }

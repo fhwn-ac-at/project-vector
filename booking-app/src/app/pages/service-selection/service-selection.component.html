@@ -1,1 +1,3 @@
-<app-page title="Service Auswahl"></app-page>
+<app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServices && selectedServices.length === 0">
+    <app-list [options]="services" (selectionChanged)="selectedServices = $event"></app-list>
+</app-page>

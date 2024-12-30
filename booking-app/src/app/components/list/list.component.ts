@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { MatListModule, MatSelectionList } from '@angular/material/list';
+import { MatListModule, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 
 // Component to display a list with selectable options
 @Component({
@@ -13,9 +13,9 @@ export class ListComponent {
 
   @Output() selectionChanged = new EventEmitter<string[]>();
 
-  @ViewChild("#list") list?: MatSelectionList;
+  @ViewChild("list") list?: MatSelectionList;
 
-  // On selection changed
+  // On selection changed emit all selected options
   onChange() {
     const selected = this.list?.selectedOptions.selected.map(o => o.value);
     this.selectionChanged.emit(selected);
