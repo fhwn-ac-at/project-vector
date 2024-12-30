@@ -1,3 +1,9 @@
-<app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServices && selectedServices.length === 0">
-    <app-list [options]="services" (selectionChanged)="selectedServices = $event"></app-list>
+<app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServices.length === 0">
+    <mat-selection-list #list (selectionChange)="selectionChange()">
+        @for (service of services; track service) {
+        <mat-list-option [value]="service">
+            {{service}}
+        </mat-list-option>
+        }
+    </mat-selection-list>
 </app-page>
