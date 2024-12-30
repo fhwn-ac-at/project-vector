@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'
 
@@ -14,5 +14,10 @@ import { MatIconModule } from '@angular/material/icon'
 export class PageComponent {
   @Input() title?: string;
   @Input() hideBack = false;
+  @Input() hideNext = false;
+  @Input() disableBack = false;
   @Input() disableNext = true;
+
+  @Output() back = new EventEmitter<void>();
+  @Output() next = new EventEmitter<void>();
 }

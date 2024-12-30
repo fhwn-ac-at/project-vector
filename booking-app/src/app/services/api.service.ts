@@ -10,6 +10,7 @@ export class ApiService {
 
   constructor() { }
 
+  // Get all available services
   getServices(): Promise<ServiceEntity[]> {
     // TODO implement actual connection
     return Promise.resolve([
@@ -18,5 +19,10 @@ export class ApiService {
       new ServiceEntity("Haare föhnen", 15),
       new ServiceEntity("Haare färben", 50),
     ]);
+  }
+
+  // Save selected services
+  saveSelectedServices(services: ServiceEntity[]) {
+    // TOOD save services
   }
 }

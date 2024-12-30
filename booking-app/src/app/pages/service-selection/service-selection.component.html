@@ -1,7 +1,7 @@
-<app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServices.length === 0">
+<app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServices.length === 0" (next)="next()">
     <mat-selection-list #list (selectionChange)="selectionChange()">
         @for (service of services; track service.name) {
-        <mat-list-option [value]="service.name">
+        <mat-list-option [value]="service">
             {{service.name}} | {{service.price}} €
         </mat-list-option>
         }

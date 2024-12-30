@@ -3,6 +3,8 @@ import { PageComponent } from '../../components/page/page.component';
 import { ApiService } from '../../services/api.service';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { ServiceEntity } from '../../entities/service.entity';
+import { Router } from '@angular/router';
+import { StateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-service-selection',
@@ -16,7 +18,7 @@ export class ServiceSelectionComponent implements OnInit {
   services: ServiceEntity[] = [];
   selectedServices: ServiceEntity[] = [];
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router, private state: StateService) { }
 
   ngOnInit(): void {
     this.api.getServices().then((services) =>
@@ -27,5 +29,11 @@ export class ServiceSelectionComponent implements OnInit {
   // On selection changed emit all selected options
   selectionChange() {
     this.selectedServices = this.list?.selectedOptions.selected.map(o => o.value) ?? [];
+  }
+
+  // Send selection and navigate to the next page
+  next() {
+    this.state.setSelectedServices(this.selectedServices);
+    this.router.navigate(["/confirmation"]);
   }
 }
