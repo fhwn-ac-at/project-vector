@@ -1,0 +1,14 @@
+<div class="container">
+    <h1>{{ title }}</h1>
+    <ng-content></ng-content>
+    <div class="button-container">
+        <button mat-raised-button color="primary" [style.visibility]="hideBack ? 'hidden' : 'visible'"
+            [disabled]="disableBack" (click)="back.emit()">
+            <p>Zurück</p>
+        </button>
+        <button mat-raised-button color="primary" [style.visibility]="hideNext ? 'hidden' : 'visible'"
+            [disabled]="disableNext" (click)="next.emit()">
+            <p>Weiter</p>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<app-page [hideBack]="true" [hideNext]="true">
+    <div class="confirmation">
+        <h2>Vielen Dank für Ihre Buchung!</h2>
+        <p>Wir haben Ihre Buchung erhalten und werden uns in Kürze bei Ihnen melden.</p>
+        <p>Details:</p>
+        <ul>
+            @for (service of selectedServices; track service.name) {
+            <li>{{service.name}} | {{service.price}} €</li>
+            }
+        </ul>
+    </div>
+</app-page>
