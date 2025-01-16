@@ -21,9 +21,10 @@ export class ServiceSelectionComponent implements OnInit {
   constructor(private api: ApiService, private router: Router, private state: StateService) { }
 
   ngOnInit(): void {
-    this.api.getServices().then((services) =>
+    this.api.getServices().subscribe((services) => {
+      console.log('services', services);
       this.services = services
-    );
+    });
   }
 
   // On selection changed emit all selected options

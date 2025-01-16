@@ -1,24 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ServiceEntity } from '../entities/service.entity';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 // Service to communicate with the API
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private static readonly baseUrl = ""; // TODO define base URL
+  private static readonly baseUrl = "http://192.168.0.45:8080"; // TODO define base URL
 
-  constructor() { }
+  constructor(private http: HttpClient) {
+  }
 
   // Get all available services
-  getServices(): Promise<ServiceEntity[]> {
-    // TODO implement actual connection
-    return Promise.resolve([
-      new ServiceEntity("Haare schneiden", 20),
-      new ServiceEntity("Haare waschen", 10),
-      new ServiceEntity("Haare föhnen", 15),
-      new ServiceEntity("Haare färben", 50),
-    ]);
+  getServices(): Observable<ServiceEntity[]> {
+    return this.http.get<ServiceEntity[]>(`${ApiService.baseUrl}/api/offers`);
   }
 
   // Save selected services
