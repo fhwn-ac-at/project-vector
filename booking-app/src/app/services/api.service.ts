@@ -19,7 +19,9 @@ export class ApiService {
   }
 
   // Save selected services
-  saveSelectedServices(services: ServiceEntity[]) {
-    // TOOD save services
+  save(services: ServiceEntity[]) {
+    // TODO
+    return this.http.post(`${ApiService.baseUrl}/api/book`,
+      services.map(s => ({ "offerId": s.id, "employeeIds": s.employees.map(e => e.id) })));
   }
 }
