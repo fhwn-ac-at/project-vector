@@ -1,8 +1,16 @@
 <app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServices.length === 0" (next)="next()">
     <mat-selection-list #list (selectionChange)="selectionChange()">
-        @for (service of services; track service.name) {
+        @for (service of services; track service.id) {
         <mat-list-option [value]="service">
-            {{service.name}} | {{service.price}} €
+            <p>{{service.name}} | {{service.price}} €</p>
+            <mat-form-field style="height: 4.2em; margin: 1.5em 0 0.2em 5em">
+                <mat-select [(value)]="selectedEmployeeId" (click)="onEmplyoeeSelection($event)">
+                    <mat-option [value]="anyEmployeeOption">{{anyEmployeeOption}}</mat-option>
+                    @for (employee of service.employees; track employee.id) {
+                    <mat-option [value]="employee.id">{{employee.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
         </mat-list-option>
         }
     </mat-selection-list>

@@ -1,0 +1,7 @@
+mat-list-option p {
+    display: inline-block;
+}
+
+mat-list-option mat-form-field {
+    margin-left: 2em;
+}
