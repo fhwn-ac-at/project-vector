@@ -9,13 +9,13 @@ const links = [
             badge: 100,
         },
         {
-            label: "Home",
-            icon: "i-heroicons-home",
+            label: "Kalender",
+            icon: "i-heroicons-calendar",
             to: "/",
         },
         {
             label: "Angebote Verwalten",
-            icon: "i-heroicons-chart-bar",
+            icon: "i-heroicons-shopping-bag",
             to: "/offers",
         },
         {
@@ -25,11 +25,6 @@ const links = [
         },
     ],
     [
-        {
-            label: "Settings",
-            icon: "i-heroicons-cog",
-            to: "/",
-        },
         {
             label: "Logout",
             icon: "i-heroicons-arrow-left-end-on-rectangle",
@@ -49,9 +44,9 @@ const links = [
                 :links="links"
             />
         </div>
-
-        <div class="p-4 flex-grow">
-            <div>
+        <!-- Main Content -->
+        <div class="p-4 flex-grow overflow-hidden">
+            <div class="h-full w-full overflow-hidden">
                 <slot />
             </div>
         </div>
