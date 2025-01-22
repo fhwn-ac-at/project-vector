@@ -50,7 +50,7 @@ const links = [
             />
         </div>
 
-        <div class="p-4 w-full">
+        <div class="p-4 flex-grow">
             <div>
                 <slot />
             </div>

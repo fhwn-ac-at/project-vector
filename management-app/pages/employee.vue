@@ -14,35 +14,50 @@
         <div class="py-4">
             <div v-if="data == null">Keine Mitarbeiter</div>
             <div v-else>
-                <div
-                    v-for="item in data"
-                    :key="item"
-                    class="flex justify-between gap-2"
-                >
-                    <UCard>
-                        <template #header>
-                            <h1 class="text-md font-bold">
-                                {{ item["name"] }}
+                <div class="flex flex-wrap gap-4">
+                    <div
+                        v-for="item in data"
+                        :key="item"
+                        class="justify-between gap-2"
+                    >
+                        <UCard>
+                            <template #header>
+                                <div class="flex gap-8 items-center justify-between">
+                                    <div class="flex gap-2 items-center">
+                                        <UIcon
+                                            name="heroicons-user"
+                                            class="w-5 h-5"
+                                        />
+                                        <h1 class="text-md font-bold">
+                                            {{ item["name"] }}
+                                        </h1>
+                                    </div>
+                                    <UButton
+                                        color="red"
+                                        variant="outline"
+                                        @click="deleteEmployee(item.id)"
+                                        >Löschen</UButton
+                                    >
+                                </div>
+                            </template>
+                            <h1 class="text-md font-bold mb-2">
+                                Kann:
                             </h1>
-                        </template>
-                        <div>
-                            Mitarbeiter:
-                            <ul>
-                                <li>Max Mustermann</li>
-                                <li>Max Mustermann</li>
-                                <li>Max Mustermann</li>
-                            </ul>
-                        </div>
+                            <div class="flex flex-wrap gap-2">
+                                
+                                <div
+                                    v-for="offer in offers.filter((offer) =>
+                                        item.offerIds.includes(offer.id)
+                                    )"
+                                    :key="offer.id"
+                                >
 
-                        <template #footer>
-                            <UButton
-                                color="red"
-                                variant="outline"
-                                @click="deleteEmployee(item.id)"
-                                >Löschen</UButton
-                            >
-                        </template>
-                    </UCard>
+                                       <UBadge size="md">{{ offer["name"] }}</UBadge>
+                                    
+                                </div>
+                            </div>
+                        </UCard>
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,25 +115,24 @@
     </UModal>
 </template>
 
-<script setup lang="js">
+<script setup>
+const config = useRuntimeConfig();
+
 const { data, refresh } = await useFetch(
-    "http://192.168.0.45:8080/api/employees"
+    `${config.public.API_URL}/api/employees`
 );
 
-const { data: offers } = await useFetch("http://192.168.0.45:8080/api/offers");
-
+const { data: offers } = await useFetch(`${config.public.API_URL}/api/offers`);
 
 const options = ref([]);
 if (offers.value) {
-  options.value = offers.value.map((offer) => ({
-    label: offer.name,
-    value: offer.id,
-  }));
+    options.value = offers.value.map((offer) => ({
+        label: offer.name,
+        value: offer.id,
+    }));
 }
 
-
 const isOpen = ref(false);
-
 
 const state = reactive({
     name: undefined,
@@ -133,7 +147,7 @@ const validate = () => {
 
 async function deleteEmployee(id) {
     console.log(id);
-    const res = await $fetch(`http://192.168.0.45:8080/api/employees/${id}`,{
+    const res = await $fetch(`${config.public.API_URL}/api/employees/${id}`, {
         method: "DELETE",
     });
     refresh();
@@ -142,7 +156,7 @@ async function deleteEmployee(id) {
 async function onSubmit() {
     // Do something with data
 
-    const res = await $fetch("http://192.168.0.45:8080/api/employees", {
+    const res = await $fetch(`${config.public.API_URL}/api/employees`, {
         method: "POST",
         body: {
             name: state.name,

@@ -11,47 +11,78 @@
         </div>
         <UDivider />
 
-        <div class="flex py-4">
+        <div class="py-4">
             <div v-if="data == null">Keine Angebote</div>
             <div v-else>
-                <div v-for="item in data" :key="item">
-                    <UCard>
-                        <template #header>
-                            <h1 class="text-md font-bold">
-                                {{ item["name"] }}
-                            </h1>
-                        </template>
-                        <div>
-                            Mitarbeiter:
-                            <ul>
-                                <li>Max Mustermann</li>
-                                <li>Max Mustermann</li>
-                                <li>Max Mustermann</li>
-                            </ul>
-                        </div>
-
-                        <template #footer>
-                            <div class="flex justify-between gap-2">
-                                <div>
-                                    <p class="text-sm">
-                                        Preis:{{ item["price"] }}€
-                                    </p>
+                <div class="flex flex-wrap gap-4">
+                    <div v-for="item in data" :key="item">
+                        <UCard>
+                            <template #header>
+                                <div class="flex items-center gap-4">
+                                    <h1 class="text-md font-bold">
+                                        {{ item["name"] }}
+                                    </h1>
+                                    <UButton
+                                        color="red"
+                                        variant="outline"
+                                        @click="deleteOffer(item.id)"
+                                        >Löschen</UButton
+                                    >
                                 </div>
-                                <div>
-                                    <p class="text-sm">
-                                        Dauer:
-                                        {{ item["durationInMinutes"] }} Minuten
-                                    </p>
+                            </template>
+                            <div>
+                                <h1 class="text-md font-bold mb-2">
+                                    Können:
+                                </h1>
+                                <div class="flex flex-wrap gap-2">
+                                    <div
+                                        v-for="option in options"
+                                        :key="option.name"
+                                    >
+                                        <UBadge
+                                            size="md"
+                                            v-if="
+                                                option.offerIds.includes(
+                                                    item.id
+                                                )
+                                            "
+                                        >
+                                            {{ option.name }}
+                                        </UBadge>
+                                    </div>
                                 </div>
                             </div>
-                            <UButton
-                                color="red"
-                                variant="outline"
-                                @click="deleteOffer(item.id)"
-                                >Löschen</UButton
-                            >
-                        </template>
-                    </UCard>
+
+                            <template #footer>
+                                <div class="flex justify-between gap-2">
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <UIcon
+                                                name="i-heroicons-currency-euro"
+                                                class="w-5 h-5"
+                                            ></UIcon>
+                                            <h1>
+                                                {{ item["price"] }}
+                                                €
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <UIcon
+                                                name="i-heroicons-clock"
+                                                class="w-5 h-5"
+                                            />
+                                            <h1>
+                                                {{ item["durationInMinutes"] }}
+                                                Min.
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </UCard>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,8 +159,21 @@
 const config = useRuntimeConfig();
 
 const { data, status, refresh } = await useFetch(
-    "http://192.168.0.45:8080/api/offers"
+    `${config.public.API_URL}/api/offers`
 );
+
+const { data: employees } = await useFetch(
+    `${config.public.API_URL}/api/employees`
+);
+
+const options = ref([]);
+if (employees.value) {
+    options.value = employees.value.map((employee) => ({
+        name: employee.name,
+        offerIds: employee.offerIds,
+    }));
+}
+
 console.log("------------------------");
 console.log(status);
 console.log(data);
@@ -153,7 +197,7 @@ const validate = () => {
 
 async function deleteOffer(id) {
     console.log(id);
-    const res = await $fetch(`http://192.168.0.45:8080/api/offers/${id}`,{
+    const res = await $fetch(`${config.public.API_URL}/api/offers/${id}`, {
         method: "DELETE",
     });
     refresh();
@@ -161,7 +205,7 @@ async function deleteOffer(id) {
 
 async function onSubmit() {
     // Do something with data
-    const res = await $fetch("http://192.168.0.45:8080/api/offers", {
+    const res = await $fetch(`${config.public.API_URL}/api/offers`, {
         method: "POST",
         body: {
             name: state.name,
