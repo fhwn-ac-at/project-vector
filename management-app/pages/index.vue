@@ -40,7 +40,6 @@ onBeforeMount(() => {
         events: [], // Start with an empty events list
         plugins: [eventModal, eventsServicePlugin],
     });
-
 });
 
 onMounted(() => {

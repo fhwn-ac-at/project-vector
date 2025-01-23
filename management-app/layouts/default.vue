@@ -1,4 +1,10 @@
-<script setup lang="ts">
+<script setup>
+import { useAuthStore } from '~/stores/auth'; // Import the Pinia auth store
+
+
+function click(){
+    useAuthStore().logout();
+}
 const links = [
     [
         {
@@ -28,7 +34,7 @@ const links = [
         {
             label: "Logout",
             icon: "i-heroicons-arrow-left-end-on-rectangle",
-            to: "/",
+            click, // Define the action for logout
         },
     ],
 ];
@@ -36,12 +42,14 @@ const links = [
 
 <template>
     <div class="flex h-screen w-screen">
+        <!-- Vertical Navigation -->
         <div class="flex items-center justify-center p-4">
             <UVerticalNavigation
                 :ui="{
                     size: 'text-md',
                 }"
                 :links="links"
+                @click="handleClick"
             />
         </div>
         <!-- Main Content -->
