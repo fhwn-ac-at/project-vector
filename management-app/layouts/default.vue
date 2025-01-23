@@ -1,45 +1,3 @@
-<script setup>
-import { useAuthStore } from '~/stores/auth'; // Import the Pinia auth store
-
-
-function click(){
-    useAuthStore().logout();
-}
-const links = [
-    [
-        {
-            label: "Profile",
-            avatar: {
-                src: "https://avatars.githubusercontent.com/u/739984?v=4",
-            },
-            badge: 100,
-        },
-        {
-            label: "Kalender",
-            icon: "i-heroicons-calendar",
-            to: "/",
-        },
-        {
-            label: "Angebote Verwalten",
-            icon: "i-heroicons-shopping-bag",
-            to: "/offers",
-        },
-        {
-            label: "Mitarbeiter Verwalten",
-            icon: "i-heroicons-user",
-            to: "/employee",
-        },
-    ],
-    [
-        {
-            label: "Logout",
-            icon: "i-heroicons-arrow-left-end-on-rectangle",
-            click, // Define the action for logout
-        },
-    ],
-];
-</script>
-
 <template>
     <div class="flex h-screen w-screen">
         <!-- Vertical Navigation -->
@@ -60,3 +18,50 @@ const links = [
         </div>
     </div>
 </template>
+
+<script setup>
+import { useAuthStore } from "~/stores/auth"; // Import the Pinia auth store
+
+const authStore = useAuthStore();
+
+function click() {
+    // Check if the clicked item is the logout option
+    authStore.logout(); // Trigger logout
+}
+
+const links = [
+    [
+        {
+            label: "Willkommen Maxi",
+            avatar: {
+                alt: "Maximilian Bleier",
+                size: "md",
+            },
+        },
+    ],
+    [
+        {
+            label: "Kalender",
+            icon: "i-heroicons-calendar",
+            to: "/",
+        },
+        {
+            label: "Angebote Verwalten",
+            icon: "i-heroicons-shopping-bag",
+            to: "/offers",
+        },
+        {
+            label: "Mitarbeiter Verwalten",
+            icon: "i-heroicons-user",
+            to: "/employee",
+        },
+    ],
+    [
+        {
+            label: "Logout",
+            icon: "i-heroicons-arrow-left-end-on-rectangle",
+            click,
+        },
+    ],
+];
+</script>

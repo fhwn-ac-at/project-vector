@@ -13,10 +13,12 @@ import "@schedule-x/theme-default/dist/index.css";
 
 const eventsServicePlugin = createEventsServicePlugin();
 const eventModal = createEventModalPlugin();
+
 let calendarApp = null;
 
 const config = useRuntimeConfig();
 
+// Fetch events and add them to the calendar
 async function fetchEvents(calendar) {
     try {
         const { data } = await useFetch(`${config.public.API_URL}/api/events`);
@@ -33,6 +35,7 @@ async function fetchEvents(calendar) {
     }
 }
 
+// Initialize calendar on mounted lifecycle
 onBeforeMount(() => {
     calendarApp = createCalendar({
         locale: "de-DE",
@@ -40,6 +43,8 @@ onBeforeMount(() => {
         events: [], // Start with an empty events list
         plugins: [eventModal, eventsServicePlugin],
     });
+
+    // Fetch events after initializing the calendar
 });
 
 onMounted(() => {
@@ -61,6 +66,7 @@ onMounted(() => {
 .sx-vue-calendar-wrapper {
     height: 96.5vh;
 }
+
 .sx__event-modal,
 .sx__date-picker-popup {
     overflow: hidden;
