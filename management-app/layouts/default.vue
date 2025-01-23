@@ -7,7 +7,6 @@
                     size: 'text-md',
                 }"
                 :links="links"
-                @click="handleClick"
             />
         </div>
         <!-- Main Content -->

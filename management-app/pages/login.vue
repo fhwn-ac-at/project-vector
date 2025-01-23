@@ -6,7 +6,7 @@
             </template>
 
             <div class="space-y-4">
-                <UForm class="space-y-4" @submit="onSubmit" :validate="validate">
+                <UForm class="space-y-4" @submit="onSubmit" :validate="validate" :state="state">
                     <!-- Email Input -->
                     <UFormGroup label="E-Mail" name="email">
                         <UInput
