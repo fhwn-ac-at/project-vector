@@ -3,19 +3,25 @@ import { PageComponent } from '../../components/page/page.component';
 import { ApiService } from '../../services/api.service';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatSelectModule, MatSelectChange } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { ServiceEntity } from '../../entities/service.entity';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
+import { dateValidator } from './date-validator';
 
 @Component({
   selector: 'app-service-selection',
-  imports: [PageComponent, MatListModule, MatSelectModule],
+  imports: [PageComponent, MatListModule, MatSelectModule, MatDatepickerModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule],
   templateUrl: './service-selection.component.html',
   styleUrl: './service-selection.component.css'
 })
 export class ServiceSelectionComponent implements OnInit {
   @ViewChild("list") list?: MatSelectionList;
 
+  date = new FormControl<Date>(new Date(), [dateValidator()]);
   services: ServiceEntity[] = [];
   selectedServiceIds: string[] = [];
 
@@ -36,6 +42,12 @@ export class ServiceSelectionComponent implements OnInit {
     });
   }
 
+  // Get error message for date field
+  getDateErrorMessage() {
+    return this.date.hasError('invalidDate') ? 'The date is invalid' :
+      '';
+  }
+
   // On selection changed emit all selected options
   selectionChange() {
     this.selectedServiceIds = this.list?.selectedOptions.selected.map(s => s.value) ?? [];
@@ -47,6 +59,9 @@ export class ServiceSelectionComponent implements OnInit {
 
   // Send selection and navigate to the next page
   next() {
+    if (this.date.invalid)
+      return;
+
     const selectedServices: ServiceEntity[] = [];
 
     // Build selected services
@@ -66,7 +81,7 @@ export class ServiceSelectionComponent implements OnInit {
 
 
     this.state.setSelectedServices(selectedServices);
-    this.api.save(selectedServices);
+    this.api.save(this.date.value!, selectedServices);
     this.router.navigate(["/confirmation"]);
   }
 }

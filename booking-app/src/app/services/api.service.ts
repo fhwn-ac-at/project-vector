@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private static readonly baseUrl = "http://192.168.0.45:8080"; // TODO define base URL
+  private static readonly baseUrl = "http://192.168.0.40:8080";
 
   constructor(private http: HttpClient) {
   }
@@ -19,9 +19,10 @@ export class ApiService {
   }
 
   // Save selected services
-  save(services: ServiceEntity[]) {
-    // TODO
-    return this.http.post(`${ApiService.baseUrl}/api/book`,
-      services.map(s => ({ "offerId": s.id, "employeeIds": s.employees.map(e => e.id) })));
+  save(date: Date, services: ServiceEntity[]) {
+    return this.http.post(`${ApiService.baseUrl}/api/appointments/requests`, {
+      "date": date.toISOString().split('T')[0],
+      "data": services.map(s => ({ "offerId": s.id, "employeeIds": s.employees.map(e => e.id) }))
+    });
   }
 }

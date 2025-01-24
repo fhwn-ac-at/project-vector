@@ -1,4 +1,17 @@
 <app-page title="Service Auswahl" [hideBack]="true" [disableNext]="selectedServiceIds.length === 0" (next)="next()">
+    <!-- Date input -->
+    <mat-form-field id="date-picker-form">
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" [formControl]="date">
+        @if (date.invalid) {
+        <mat-error>{{getDateErrorMessage()}}</mat-error>
+        }
+
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Service and employee selection -->
     <mat-selection-list #list (selectionChange)="selectionChange()">
         @for (service of services; track service.id; let idx = $index) {
         <mat-list-option [value]="service.id">
