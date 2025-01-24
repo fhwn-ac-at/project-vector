@@ -21,6 +21,9 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/firebase-messaging-sw.js",
+              "src/assets/firebase-app.js",
+              "src/assets/firebase-messaging.js",
               {
                 "glob": "**/*",
                 "input": "public"
