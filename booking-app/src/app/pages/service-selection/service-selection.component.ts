@@ -37,7 +37,7 @@ export class ServiceSelectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.getServices().subscribe((services) => {
-      console.log(services);
+      console.log("Offers: ", services);
       this.services = services;
 
       // Init employee selection fields
