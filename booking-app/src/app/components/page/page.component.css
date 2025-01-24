@@ -2,10 +2,6 @@
     margin: 3em;
 }
 
-h1 {
-    margin: 0;
-}
-
 .button-container {
     display: flex;
     justify-content: space-between;
