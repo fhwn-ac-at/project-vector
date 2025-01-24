@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
-import { SwPush } from '@angular/service-worker';
+import { AngularFireMessaging } from '@angular/fire/compat/messaging';
+import { StateService } from './state.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
+  constructor(private messaging: AngularFireMessaging, private state: StateService) { }
 
-  constructor(private swPush: SwPush) { }
+  requestPermission() {
+    this.messaging.requestToken
+      .subscribe({
+        next: (token) => {
+          console.log('Permission granted to receive messages!');
+          this.state.setToken(token);
+        },
+        error: (error) => console.error(error),
+      });
+  }
 
-  requestPermission(): void {
-    this.swPush.requestSubscription({
-      serverPublicKey: ''
-    })
-      .then(subscription => {
-        // Sende das Abonnement an deinen Server 
-        console.log('Subscription:', subscription);
-      })
-      .catch(err => console.error('Could not subscribe to notifications', err));
+  receiveMessage() {
+    this.messaging.messages
+      .subscribe((message) => { console.log('Message received. ', message); });
   }
 }
