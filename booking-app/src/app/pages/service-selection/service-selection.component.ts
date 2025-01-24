@@ -11,10 +11,12 @@ import { ServiceEntity } from '../../entities/service.entity';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
 import { dateValidator } from './date-validator';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-service-selection',
-  imports: [PageComponent, MatListModule, MatSelectModule, MatDatepickerModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule],
+  imports: [PageComponent, MatListModule, MatSelectModule, MatDatepickerModule,
+    MatFormFieldModule, ReactiveFormsModule, MatInputModule],
   templateUrl: './service-selection.component.html',
   styleUrl: './service-selection.component.css'
 })
@@ -29,7 +31,9 @@ export class ServiceSelectionComponent implements OnInit {
   readonly anyEmployeeOption: string = "Beliebiger Mitarbeiter";
   selectedEmployeeIds: Map<string, string> = new Map();
 
-  constructor(private api: ApiService, private router: Router, private state: StateService) { }
+  constructor(private api: ApiService, private router: Router, private state: StateService, private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('de-DE');
+  }
 
   ngOnInit(): void {
     this.api.getServices().subscribe((services) => {
@@ -44,7 +48,7 @@ export class ServiceSelectionComponent implements OnInit {
 
   // Get error message for date field
   getDateErrorMessage() {
-    return this.date.hasError('invalidDate') ? 'The date is invalid' :
+    return this.date.hasError('invalidDate') ? 'Das Datum ist ungültig!' :
       '';
   }
 
@@ -81,7 +85,8 @@ export class ServiceSelectionComponent implements OnInit {
 
 
     this.state.setSelectedServices(selectedServices);
-    this.api.save(this.date.value!, selectedServices);
+    this.api.save(this.date.value!, selectedServices)
+      .subscribe(() => console.log("Saved successfully"));
     this.router.navigate(["/confirmation"]);
   }
 }

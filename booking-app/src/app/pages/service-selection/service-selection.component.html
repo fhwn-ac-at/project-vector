@@ -2,7 +2,7 @@
     <!-- Date input -->
     <mat-form-field id="date-picker-form">
         <mat-label>Datum</mat-label>
-        <input matInput [matDatepicker]="picker" placeholder="Choose a date" [formControl]="date">
+        <input matInput [matDatepicker]="picker" [formControl]="date">
         @if (date.invalid) {
         <mat-error>{{getDateErrorMessage()}}</mat-error>
         }
