@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   constructor(private notificationService: NotificationService) { }
 
   ngOnInit(): void {
-    this.notificationService.requestPermission();
-    this.notificationService.receiveMessage();
+    this.notificationService.init();
   }
 }

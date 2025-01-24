@@ -3,10 +3,10 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 
 
 export const appConfig: ApplicationConfig = {
@@ -20,5 +20,7 @@ export const appConfig: ApplicationConfig = {
     storageBucket: "vector-d2098.firebasestorage.app",
     messagingSenderId: "1057153687079",
     appId: "1:1057153687079:web:35a651054ee8670c9cf802"
-  }))]
+  })),
+  provideMessaging(() => getMessaging()),
+  ]
 };
