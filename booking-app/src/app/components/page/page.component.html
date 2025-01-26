@@ -2,13 +2,7 @@
     <h1>{{ title }}</h1>
     <ng-content></ng-content>
     <div class="button-container">
-        <button mat-raised-button color="primary" [style.visibility]="hideBack ? 'hidden' : 'visible'"
-            [disabled]="disableBack" (click)="back.emit()">
-            <p>Zurück</p>
-        </button>
-        <button mat-raised-button color="primary" [style.visibility]="hideNext ? 'hidden' : 'visible'"
-            [disabled]="disableNext" (click)="next.emit()">
-            <p>Weiter</p>
-        </button>
+        <app-button text="Zurück" [hidden]="hideBack" [disabled]="disableBack" (click)="back.emit()"></app-button>
+        <app-button text="Weiter" [hidden]="hideNext" [disabled]="disableNext" (click)="next.emit()"></app-button>
     </div>
 </div>

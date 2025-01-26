@@ -6,8 +6,23 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class StateService {
+  private tokenSubject = new BehaviorSubject<string | null>(null);
+  private messageSubject = new BehaviorSubject<string | null>(null);
   private selectedServicesSubject = new BehaviorSubject<ServiceEntity[]>([]);
+
+  token$ = this.tokenSubject.asObservable();
+  message$ = this.messageSubject.asObservable();
   selectedServices$ = this.selectedServicesSubject.asObservable();
+
+  // Update token in the state
+  setToken(token: string | null) {
+    this.tokenSubject.next(token);
+  }
+
+  // Update received message in the state
+  setMessage(token: string | null) {
+    this.messageSubject.next(token);
+  }
 
   // Update selected services in the state
   setSelectedServices(services: ServiceEntity[]) {

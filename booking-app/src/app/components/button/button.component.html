@@ -1,0 +1,4 @@
+<button mat-raised-button color="primary" [style.visibility]="hidden ? 'hidden' : 'visible'" [disabled]="disabled"
+    (click)="click.emit()">
+    <p>{{text}}</p>
+</button>

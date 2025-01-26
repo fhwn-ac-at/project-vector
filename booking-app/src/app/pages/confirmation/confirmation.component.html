@@ -1,11 +1,20 @@
 <app-page [hideBack]="true" [hideNext]="true">
     <div class="confirmation">
+        @if (message) {
+        <h3>Nachricht erhalten:</h3>
+        <p>{{message}}</p>
+        }
         <h2>Vielen Dank für Ihre Buchung!</h2>
         <p>Wir haben Ihre Buchung erhalten und werden uns in Kürze bei Ihnen melden.</p>
         <p>Details:</p>
         <ul>
             @for (service of selectedServices; track service.name) {
             <li>{{service.name}} | {{service.price}} €</li>
+            <ul>
+                @for (employee of service.employees; track employee.name) {
+                <li>{{employee.name}}</li>
+                }
+            </ul>
             }
         </ul>
     </div>

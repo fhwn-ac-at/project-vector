@@ -1,28 +1,37 @@
 import { Injectable } from '@angular/core';
 import { ServiceEntity } from '../entities/service.entity';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { StateService } from './state.service';
 
 // Service to communicate with the API
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private static readonly baseUrl = ""; // TODO define base URL
+  private static readonly baseUrl = "http://192.168.0.6:8080";
+  private token?: string | null;
 
-  constructor() { }
+  constructor(private http: HttpClient, private state: StateService) {
+    this.state.token$.subscribe((token) => {
+      this.token = token;
+    });
+  }
 
   // Get all available services
-  getServices(): Promise<ServiceEntity[]> {
-    // TODO implement actual connection
-    return Promise.resolve([
-      new ServiceEntity("Haare schneiden", 20),
-      new ServiceEntity("Haare waschen", 10),
-      new ServiceEntity("Haare föhnen", 15),
-      new ServiceEntity("Haare färben", 50),
-    ]);
+  getServices(): Observable<ServiceEntity[]> {
+    return this.http.get<ServiceEntity[]>(`${ApiService.baseUrl}/api/offers`);
   }
 
   // Save selected services
-  saveSelectedServices(services: ServiceEntity[]) {
-    // TOOD save services
+  save(date: Date, services: ServiceEntity[]) {
+    const data = {
+      "token": this.token,
+      "date": date.toISOString().split('T')[0],
+      "data": services.map(s => ({ "offerId": s.id, "employeeIds": s.employees.map(e => e.id) }))
+    };
+
+    console.log('save data: ', data)
+    return this.http.post(`${ApiService.baseUrl}/api/appointments/requests`, data);
   }
 }
