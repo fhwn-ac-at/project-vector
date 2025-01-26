@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ServiceEntity } from '../entities/service.entity';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { StateService } from './state.service';
 
 // Service to communicate with the API
 @Injectable({
@@ -9,8 +10,12 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
   private static readonly baseUrl = "http://192.168.0.6:8080";
+  private token?: string | null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private state: StateService) {
+    this.state.token$.subscribe((token) => {
+      this.token = token;
+    });
   }
 
   // Get all available services
@@ -21,6 +26,7 @@ export class ApiService {
   // Save selected services
   save(date: Date, services: ServiceEntity[]) {
     const data = {
+      "token": this.token,
       "date": date.toISOString().split('T')[0],
       "data": services.map(s => ({ "offerId": s.id, "employeeIds": s.employees.map(e => e.id) }))
     };
