@@ -1,7 +1,6 @@
-import { Injectable, OnInit } from '@angular/core';
-import { Messaging } from '@angular/fire/messaging';
+import { Injectable } from '@angular/core';
 import { StateService } from './state.service';
-import { getToken, onMessage } from 'firebase/messaging';
+import { getToken, Messaging, onMessage } from '@angular/fire/messaging';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +16,20 @@ export class NotificationService {
       }
     });
 
-    // Get current FCM token
-    getToken(this.messaging).then((token) => {
-      console.log('Token: ', token);
-      this.state.setToken(token);
-    }).catch((error) => console.log('Error receiving token', error));
+    // Register service worker
+    navigator.serviceWorker.register("/firebase-messaging-sw.js", {
+      type: "module",
+    }).then((serviceWorkerRegistration) => {
+      // Get current FCM token
+      getToken(this.messaging, {
+        serviceWorkerRegistration: serviceWorkerRegistration,
+      }).then((token) => {
+        console.log('Token: ', token);
+        this.state.setToken(token);
+      }).catch((error) => console.log('Error receiving token', error));
+    });
 
+    // Listen to incoming messages
     onMessage(this.messaging, {
       next: (payload) => {
         console.log('Message received', payload);
