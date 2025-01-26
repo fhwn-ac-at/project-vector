@@ -1,5 +1,9 @@
 <app-page [hideBack]="true" [hideNext]="true">
     <div class="confirmation">
+        @if (message) {
+        <h3>Nachricht erhalten:</h3>
+        <p>{{message}}</p>
+        }
         <h2>Vielen Dank für Ihre Buchung!</h2>
         <p>Wir haben Ihre Buchung erhalten und werden uns in Kürze bei Ihnen melden.</p>
         <p>Details:</p>

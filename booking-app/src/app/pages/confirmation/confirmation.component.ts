@@ -11,12 +11,17 @@ import { StateService } from '../../services/state.service';
 })
 export class ConfirmationComponent implements OnInit {
   selectedServices: ServiceEntity[] = [];
+  message?: string | null;
 
   constructor(private state: StateService) { }
 
   ngOnInit(): void {
     this.state.selectedServices$.subscribe((services) => {
       this.selectedServices = services;
+    });
+
+    this.state.message$.subscribe((msg) => {
+      this.message = msg;
     });
   }
 }
