@@ -6,10 +6,10 @@ import { StateService } from './state.service';
 
 // Service to communicate with the API
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-  private static readonly baseUrl = "http://192.168.0.6:8080";
+  private static readonly baseUrl = 'http://localhost:8080';
   private token?: string | null;
 
   constructor(private http: HttpClient, private state: StateService) {
@@ -26,12 +26,18 @@ export class ApiService {
   // Save selected services
   save(date: Date, services: ServiceEntity[]) {
     const data = {
-      "token": this.token,
-      "date": date.toISOString().split('T')[0],
-      "data": services.map(s => ({ "offerId": s.id, "employeeIds": s.employees.map(e => e.id) }))
+      notificationToken: this.token,
+      date: date.toISOString().split('T')[0],
+      data: services.map((s) => ({
+        offerId: s.id,
+        employeeIds: s.employees.map((e) => e.id),
+      })),
     };
 
-    console.log('save data: ', data)
-    return this.http.post(`${ApiService.baseUrl}/api/appointments/requests`, data);
+    console.log('save data: ', data);
+    return this.http.post(
+      `${ApiService.baseUrl}/api/appointments/requests`,
+      data
+    );
   }
 }

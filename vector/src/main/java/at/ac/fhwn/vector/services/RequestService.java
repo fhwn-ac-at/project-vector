@@ -1,6 +1,8 @@
 package at.ac.fhwn.vector.services;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -137,12 +139,18 @@ public class RequestService {
                             requestData),
                     appointment.getStartTime(),
                     appointment.getEndTime()));
-            Message message = Message.builder().putData("startTime", appointment.getStartTime().toString())
-                    .putData("endTime", appointment.getEndTime().toString()).setToken(request.getNotificationToken())
+            Message message = Message.builder()
+                    .putData("startTime",
+                            DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC)
+                                    .format(appointment.getStartTime().toInstant()))
+                    .putData("endTime", DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC)
+                            .format(appointment.getEndTime().toInstant()))
+                    .setToken(request.getNotificationToken())
                     .build();
 
             try {
-                FirebaseMessaging.getInstance().send(message);
+                String messageId = FirebaseMessaging.getInstance().send(message);
+                log.info("Push notification sent to {}", messageId);
             } catch (FirebaseMessagingException e) {
                 log.error("Push notification could not be sent.", e);
             }
