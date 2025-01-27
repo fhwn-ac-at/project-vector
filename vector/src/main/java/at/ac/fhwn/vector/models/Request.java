@@ -34,4 +34,6 @@ public class Request {
     private List<OfferIdEmployeesDTO> data;
 
     private Boolean isProcessed = false;
+
+    private String notificationToken;
 }

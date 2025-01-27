@@ -12,6 +12,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+
 import at.ac.fhwn.vector.dtos.AppointmentDTO;
 import at.ac.fhwn.vector.dtos.AppointmentOfferEmployeeDTO;
 import at.ac.fhwn.vector.dtos.CreateAppointmentRequestDTO;
@@ -52,6 +56,7 @@ public class RequestService {
         Request req = new Request();
         req.setDate(createAppointmentRequestDTO.getDate());
         req.setData(createAppointmentRequestDTO.getData());
+        req.setNotificationToken(createAppointmentRequestDTO.getNotificationToken());
 
         rabbitTemplate.convertAndSend("appointment-exchange", "appointment.key", req);
     }
@@ -132,6 +137,15 @@ public class RequestService {
                             requestData),
                     appointment.getStartTime(),
                     appointment.getEndTime()));
+            Message message = Message.builder().putData("startTime", appointment.getStartTime().toString())
+                    .putData("endTime", appointment.getEndTime().toString()).setToken(request.getNotificationToken())
+                    .build();
+
+            try {
+                FirebaseMessaging.getInstance().send(message);
+            } catch (FirebaseMessagingException e) {
+                log.error("Push notification could not be sent.", e);
+            }
         }
 
         return result;

@@ -12,4 +12,6 @@ public class CreateAppointmentRequestDTO {
 
     private List<OfferIdEmployeesDTO> data;
 
+    private String notificationToken;
+
 }
