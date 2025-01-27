@@ -106,6 +106,7 @@ public class RequestService {
         List<Request> requests = this.requestRepository.findByDateAndIsProcessed(date, false);
 
         Calendar tmpCal = Calendar.getInstance();
+        tmpCal.setTime(date);
         tmpCal.set(Calendar.HOUR_OF_DAY, 9);
         tmpCal.set(Calendar.MINUTE, 0);
         tmpCal.set(Calendar.SECOND, 0);
