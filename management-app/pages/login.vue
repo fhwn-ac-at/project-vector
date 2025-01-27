@@ -40,6 +40,9 @@
 <script setup>
 import { useAuthStore } from "~/stores/auth";
 
+const { $firebaseAuth } = useNuxtApp();
+const user = ref(null);
+
 // Disable default layout for this page
 definePageMeta({
     layout: false,
@@ -66,7 +69,7 @@ const validate = () => {
 };
 
 // Form Submission Handler
-const onSubmit = () => {
+async function onSubmit() {
     const errors = validate();
 
     // If there are validation errors, display them
@@ -75,12 +78,20 @@ const onSubmit = () => {
         return;
     }
 
-    // Simulated login logic
-    if (state.email === "user@example.com" && state.password === "a") {
-        authStore.login({ email: state.email }); // Save user data to store
-        router.push("/"); // Redirect to the home page
-    } else {
-        console.error("Invalid credentials");
+    try {
+        const auth = $firebaseAuth;
+        const { signInWithEmailAndPassword } = await import("firebase/auth");
+        const result = await signInWithEmailAndPassword(
+            auth,
+            state.email,
+            state.password
+        );
+        user.value = result.user;
+        console.log("Logged in:", user.value);
+        authStore.login({ accessToken: user.value.accessToken });
+        router.push("/");
+    } catch (error) {
+        console.error("Login failed:", error);
     }
-};
+}
 </script>

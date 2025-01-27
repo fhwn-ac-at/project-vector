@@ -47,7 +47,7 @@
                         <h1 class="text-md font-bold mb-2">Kann:</h1>
                         <div class="flex flex-wrap gap-2">
                             <UBadge
-                                v-for="offer in relatedOffers(item)"
+                                v-for="offer in item.offers"
                                 :key="offer.id"
                                 size="md"
                             >
@@ -109,6 +109,7 @@
 
 <script setup>
 const config = useRuntimeConfig();
+import { useAuthStore } from "~/stores/auth";
 
 // Fetch data
 const { data, refresh } = await useFetch(
@@ -136,8 +137,15 @@ const options = computed(() =>
 );
 
 // Get offers related to an employee
-const relatedOffers = (employee) =>
-    offers.value?.filter((offer) => employee.offerIds.includes(offer.id)) || [];
+const relatedOffers = (employee) => {
+    if (employee.offerIds != null) {
+        return (
+            offers.value?.filter((offer) =>
+                employee.offerIds.includes(offer.id)
+            ) || []
+        );
+    }
+};
 
 // Form validation
 const validate = () => {
@@ -148,24 +156,63 @@ const validate = () => {
 
 // Delete employee
 async function deleteEmployee(id) {
-    await $fetch(`${config.public.API_URL}/api/employees/${id}`, {
-        method: "DELETE",
-    });
-    refresh();
+    const authStore = useAuthStore();
+    const accessToken = authStore.accessToken;
+
+    if (!accessToken) {
+        console.error("Access token is missing. Redirecting to login.");
+        return navigateTo("/login"); // Redirect to login if no token
+    }
+    console.log("Access token:", accessToken.accessToken);
+    try {
+        await $fetch(`${config.public.API_URL}/api/employees/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${accessToken.accessToken}`,
+                "Content-Type": "application/json", // Optional, depending on server requirements
+            },
+        });
+
+        console.log("Offer deleted successfully");
+        refresh(); // Refresh data after deletion
+    } catch (error) {
+        console.error("Error deleting offer:", error);
+    }
 }
 
-// Submit form
+// Submit new offer
 async function onSubmit() {
-    await $fetch(`${config.public.API_URL}/api/employees`, {
-        method: "POST",
-        body: {
-            name: state.name,
-            offerIds: state.selected.map((item) => item.value),
-        },
-    });
-    state.name = "";
-    state.selected = [];
-    isOpen.value = false;
-    refresh();
+    const authStore = useAuthStore();
+
+    // Get the access token
+    const accessToken = authStore.accessToken;
+
+    if (!accessToken) {
+        console.error("Access token is missing");
+        return;
+    }
+    console.log("Access token:", accessToken.accessToken);
+    try {
+        await $fetch(`${config.public.API_URL}/api/employees`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${accessToken.accessToken}`,
+                "Content-Type": "application/json",
+            },
+            body: {
+                name: state.name,
+                offerIds: state.selected.map((item) => item.value),
+            },
+        });
+
+        // Reset form and close modal
+        state.name = "";
+        state.price = null;
+        state.duration = null;
+        isOpen.value = false;
+        refresh();
+    } catch (error) {
+        console.error("Error submitting offer:", error);
+    }
 }
 </script>

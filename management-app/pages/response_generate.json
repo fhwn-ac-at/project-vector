@@ -1,0 +1,52 @@
+[
+    {
+        "id": "6a77c6c8-3b78-423b-a20a-96caf56f99f2",
+        "request": {
+            "id": "df85d2a9-3c33-4952-92ba-d81b32fbfe5c",
+            "date": "2025-01-23T23:00:00.000+00:00",
+            "data": [
+                {
+                    "offer": {
+                        "id": "766c2011-3107-4a56-98f5-dbd2c20a35fe",
+                        "name": "Haare schneiden",
+                        "price": 1.0,
+                        "durationInMinutes": 30
+                    },
+                    "employees": [
+                        {
+                            "id": "110e5be7-2d8e-41b5-b928-bf06ba164ff1",
+                            "name": "asdf"
+                        }
+                    ]
+                }
+            ]
+        },
+        "startTime": "2025-01-24T08:00:00.000+00:00",
+        "endTime": "2025-01-24T08:30:00.000+00:00"
+    },
+    {
+        "id": "c2ec659b-a287-4469-942b-795bf91cf701",
+        "request": {
+            "id": "25c32fa1-03ed-4e99-92d8-f598d07ef8f6",
+            "date": "2025-01-23T23:00:00.000+00:00",
+            "data": [
+                {
+                    "offer": {
+                        "id": "2e91b6ba-3f62-4c4c-be2e-976028fdc918",
+                        "name": "Haare waschen",
+                        "price": 1.0,
+                        "durationInMinutes": 15
+                    },
+                    "employees": [
+                        {
+                            "id": "110e5be7-2d8e-41b5-b928-bf06ba164ff1",
+                            "name": "asdf"
+                        }
+                    ]
+                }
+            ]
+        },
+        "startTime": "2025-01-24T08:30:00.000+00:00",
+        "endTime": "2025-01-24T08:45:00.000+00:00"
+    }
+]
