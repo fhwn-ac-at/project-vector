@@ -25,6 +25,8 @@ export class ApiService {
 
   // Save selected services
   save(date: Date, services: ServiceEntity[]) {
+    date.setHours(1); // Resolve issue with timezone by parsing date to string
+
     const data = {
       notificationToken: this.token,
       date: date.toISOString().split('T')[0],

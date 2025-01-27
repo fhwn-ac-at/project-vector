@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { PageComponent } from "../../components/page/page.component";
 import { ServiceEntity } from '../../entities/service.entity';
 import { StateService } from '../../services/state.service';
@@ -13,7 +13,7 @@ export class ConfirmationComponent implements OnInit {
   selectedServices: ServiceEntity[] = [];
   message?: { startTime: string, endTime: string } | null;
 
-  constructor(private state: StateService) { }
+  constructor(private state: StateService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.state.selectedServices$.subscribe((services) => {
@@ -22,6 +22,7 @@ export class ConfirmationComponent implements OnInit {
 
     this.state.message$.subscribe((msg) => {
       this.message = msg;
+      this.cdr.detectChanges();
     });
   }
 }
