@@ -33,7 +33,7 @@ export class NotificationService {
     onMessage(this.messaging, {
       next: (payload) => {
         console.log('Message received', payload);
-        // TODO display
+        this.state.setMessage(payload.data as { startTime: string, endTime: string });
       },
       error: (error) => console.log('Error receiving message', error),
       complete: () => console.log('Done listening to messages')

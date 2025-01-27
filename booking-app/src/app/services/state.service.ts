@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class StateService {
   private tokenSubject = new BehaviorSubject<string | null>(null);
-  private messageSubject = new BehaviorSubject<string | null>(null);
+  private messageSubject = new BehaviorSubject<{ startTime: string, endTime: string } | null>(null);
   private selectedServicesSubject = new BehaviorSubject<ServiceEntity[]>([]);
 
   token$ = this.tokenSubject.asObservable();
@@ -20,8 +20,8 @@ export class StateService {
   }
 
   // Update received message in the state
-  setMessage(token: string | null) {
-    this.messageSubject.next(token);
+  setMessage(message: { startTime: string, endTime: string } | null) {
+    this.messageSubject.next(message);
   }
 
   // Update selected services in the state

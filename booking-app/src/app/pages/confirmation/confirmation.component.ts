@@ -11,7 +11,7 @@ import { StateService } from '../../services/state.service';
 })
 export class ConfirmationComponent implements OnInit {
   selectedServices: ServiceEntity[] = [];
-  message?: string | null;
+  message?: { startTime: string, endTime: string } | null;
 
   constructor(private state: StateService) { }
 
