@@ -123,12 +123,105 @@ async function fetchEvents() {
                     start: formattedDateStart,
                     end: formattedDateEnd,
                 };
-                console.log("newEvent----");
-                console.log(newEvent);
-                calendarApp.eventsService.add(newEvent);
+
+                let addEvent = true;
+                eventsServicePlugin.getAll().forEach((event) => {
+                    if (event.id === newEvent.id) {
+                        addEvent = false;
+                    }
+                });
+                if (addEvent) {
+                    console.log("Adding event", newEvent);
+                    calendarApp.eventsService.add(newEvent);
+                }
+                else {
+                    console.log("Event already exists");
+                }
             });
         } else {
             console.error("No events fetched.");
+        }
+    } catch (error) {
+        console.error("Failed to fetch events:", error);
+    }
+}
+
+async function getGeneratedAppointments() {
+    console.log("Fetching generated events...");
+    try {
+        const { data } = await useFetch(
+            `${config.public.API_URL}/api/appointments`,
+            {
+                method: "GET",
+                query: {
+                    date: selectedDate.value,
+                },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authStore.accessToken.accessToken}`,
+                },
+            }
+        );
+        console.log("Checking data");
+        if (data.value) {
+            console.log("Data fetched");
+            console.log(data.value);
+            data.value.forEach((event) => {
+                const date = new Date(event.startTime);
+                const endDate = new Date(event.endTime);
+
+                // Format the date
+                const formattedDateStart = `${date.getUTCFullYear()}-${String(
+                    date.getUTCMonth() + 1
+                ).padStart(2, "0")}-${String(date.getUTCDate()).padStart(
+                    2,
+                    "0"
+                )} ${String(date.getUTCHours()).padStart(2, "0")}:${String(
+                    date.getUTCMinutes()
+                ).padStart(2, "0")}`;
+
+                const formattedDateEnd = `${endDate.getUTCFullYear()}-${String(
+                    endDate.getUTCMonth() + 1
+                ).padStart(2, "0")}-${String(endDate.getUTCDate()).padStart(
+                    2,
+                    "0"
+                )} ${String(endDate.getUTCHours()).padStart(2, "0")}:${String(
+                    endDate.getUTCMinutes()
+                ).padStart(2, "0")}`;
+                console.log("formattedDateStart");
+                let eventName = "";
+                let employeeName = "";
+                event.request.data.forEach(
+                    (data) => (eventName += data["offer"].name)
+                );
+
+                event.request.data.forEach((data) =>
+                    data["employees"].forEach((emp) => {
+                        employeeName += emp.name;
+                    })
+                );
+
+                console.log(eventName);
+                let newEvent = {
+                    id: event.id,
+                    title: eventName,
+                    people: [employeeName],
+                    start: formattedDateStart,
+                    end: formattedDateEnd,
+                };
+
+                let addEvent = true;
+                eventsServicePlugin.getAll().forEach((event) => {
+                    if (event.id === newEvent.id) {
+                        addEvent = false;
+                    }
+                });
+                if (addEvent) {
+                    calendarApp.eventsService.add(newEvent);
+                }
+            });
+        } else {
+            console.error("No generatied events fetched.");
         }
     } catch (error) {
         console.error("Failed to fetch events:", error);
@@ -144,6 +237,7 @@ onBeforeMount(() => {
                 selectedDate.value = date;
                 viewSelectedDate.value = formatter.format(new Date(date));
                 getAppoinmentCount();
+                getGeneratedAppointments();
             },
         },
         locale: "de-DE",
@@ -153,6 +247,13 @@ onBeforeMount(() => {
     });
 
     // Fetch events after initializing the calendar
+});
+
+onMounted(() => {
+    setTimeout(() => {
+        getAppoinmentCount();
+        getGeneratedAppointments();
+    }, 500);
 });
 </script>
 
